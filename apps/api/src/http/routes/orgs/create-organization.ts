@@ -13,11 +13,11 @@ export async function createOrganization(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(authMiddleware)
     .post(
-      '/organization',
+      '/organizations',
       {
         schema: {
           tags: ['organizations'],
-          summary: 'Create a new organization',
+          summary: 'Create a new organization.',
           security: [{ bearerAuth: [] }],
           body: z.object({
             name: z.string(),

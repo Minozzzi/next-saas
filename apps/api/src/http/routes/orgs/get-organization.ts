@@ -1,30 +1,35 @@
-import { roleSchema } from '@saas/auth'
 import type { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
 
 import { authMiddleware } from '@/http/middlewares/auth.middleware'
 
-export async function getMembership(app: FastifyInstance) {
+export async function getOrganization(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(authMiddleware)
     .get(
-      '/organizations/:slug/membership',
+      '/organizations/:slug',
       {
         schema: {
-          tags: ['organization'],
-          summary: 'Get user membership on organization.',
+          tags: ['organizations'],
+          summary: 'Get details from organization.',
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
           }),
           response: {
             200: z.object({
-              membership: z.object({
+              organization: z.object({
                 id: z.string().uuid(),
-                role: roleSchema,
-                organizationId: z.string().uuid(),
+                name: z.string(),
+                domain: z.string().nullable(),
+                slug: z.string(),
+                shouldAttachUsersByDomain: z.boolean(),
+                avatarUrl: z.string().url().nullable(),
+                createdAt: z.date(),
+                updatedAt: z.date(),
+                ownerId: z.string().uuid(),
               }),
             }),
           },
@@ -32,14 +37,10 @@ export async function getMembership(app: FastifyInstance) {
       },
       async (request) => {
         const { slug } = request.params
-        const { membership } = await request.getUserMembership(slug)
+        const { organization } = await request.getUserMembership(slug)
 
         return {
-          membership: {
-            id: membership.id,
-            role: membership.role,
-            organizationId: membership.organizationId,
-          },
+          organization,
         }
       },
     )
