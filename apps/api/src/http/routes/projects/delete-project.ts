@@ -15,7 +15,7 @@ export async function deleteProject(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(authMiddleware)
     .delete(
-      '/organizations/:slug/projects/:projectId',
+      '/organizations/:slug/projects/:projectSlug',
       {
         schema: {
           tags: ['projects'],
@@ -23,7 +23,7 @@ export async function deleteProject(app: FastifyInstance) {
           security: [{ bearerAuth: [] }],
           params: z.object({
             slug: z.string(),
-            projectId: z.string().uuid(),
+            projectSlug: z.string().uuid(),
           }),
           response: {
             204: z.null(),
@@ -31,12 +31,12 @@ export async function deleteProject(app: FastifyInstance) {
         },
       },
       async (request, reply) => {
-        const { slug, projectId } = request.params
+        const { slug, projectSlug } = request.params
         const { organization, membership } =
           await request.getUserMembership(slug)
 
         const project = await prisma.project.findUnique({
-          where: { id: projectId, organizationId: organization.id },
+          where: { slug: projectSlug, organizationId: organization.id },
         })
 
         if (!project) {
@@ -55,8 +55,9 @@ export async function deleteProject(app: FastifyInstance) {
             `You're not allowed to delete this project.`,
           )
         }
+
         await prisma.project.delete({
-          where: { id: projectId },
+          where: { slug: projectSlug },
         })
 
         return reply.status(204).send()
