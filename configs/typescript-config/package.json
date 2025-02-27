@@ -5,6 +5,7 @@
   "license": "MIT",
   "files": [
     "library.json",
+    "nextjs.json",
     "node.json"
   ]
 }
