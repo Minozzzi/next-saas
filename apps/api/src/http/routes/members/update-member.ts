@@ -15,10 +15,10 @@ export async function updateMember(app: FastifyInstance) {
     .withTypeProvider<ZodTypeProvider>()
     .register(authMiddleware)
     .put(
-      '/organizations/:slug/projects/:memberId',
+      '/organizations/:slug/members/:memberId',
       {
         schema: {
-          tags: ['projects'],
+          tags: ['members'],
           summary: 'Update a member.',
           security: [{ bearerAuth: [] }],
           params: z.object({
