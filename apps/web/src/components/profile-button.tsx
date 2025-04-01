@@ -46,7 +46,7 @@ export async function ProfileButton() {
 
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild>
-          <a href="/api/auth/sign-out">
+          <a href="/api/auth/sign-out" className="flex items-center">
             <LogOutIcon className="mr-2 size-4" />
             Sign out
           </a>
