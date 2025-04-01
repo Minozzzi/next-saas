@@ -1,6 +1,8 @@
 import { ChevronsUpDownIcon, PlusIcon } from 'lucide-react'
 import Link from 'next/link'
 
+import { getOrganizations } from '@/http/get-organizations'
+
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
   DropdownMenu,
@@ -12,7 +14,9 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 
-export function OrganizationSwitcher() {
+export async function OrganizationSwitcher() {
+  const { organizations } = await getOrganizations()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus-visible:ring-primary flex w-40 items-center gap-2 rounded p-1 text-sm font-medium outline-none focus-visible:ring-2">
@@ -29,15 +33,20 @@ export function OrganizationSwitcher() {
       >
         <DropdownMenuGroup>
           <DropdownMenuLabel>Organizations</DropdownMenuLabel>
+          {organizations.map((organization) => (
+            <DropdownMenuItem key={organization.id} asChild>
+              <Link href={`/organization/${organization.slug}`}>
+                <Avatar className="mr-2 size-4">
+                  {organization.avatarUrl && (
+                    <AvatarImage src={organization.avatarUrl} />
+                  )}
+                  <AvatarFallback />
+                </Avatar>
 
-          <DropdownMenuItem>
-            <Avatar className="mr-2 size-4">
-              <AvatarImage src="https://github.com/minozzzi.png" />
-              <AvatarFallback />
-            </Avatar>
-
-            <span className="line-clamp-1">Guilherme Minozzi</span>
-          </DropdownMenuItem>
+                <span className="line-clamp-1">{organization.name}</span>
+              </Link>
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
@@ -45,7 +54,7 @@ export function OrganizationSwitcher() {
         <DropdownMenuItem asChild>
           <Link href="/create-organization">
             <PlusIcon className="mr-2 size-4" />
-            Create new organization
+            Create new
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
