@@ -1,11 +1,11 @@
 {
-  "name": "web",
+  "name": "@saas/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "pnpm env:load next dev --turbo",
-    "build": "pnpm env:load next build",
-    "start": "pnpm env:load next start",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "env:load": "dotenv -e ../../.env --"
   },
