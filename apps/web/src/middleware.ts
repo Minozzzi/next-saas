@@ -5,12 +5,12 @@ export function middleware(request: NextRequest) {
 
   const response = NextResponse.next()
 
-  if (pathname.startsWith('/org/')) {
+  if (pathname.startsWith('/organization/')) {
     const [, , orgSlug] = pathname.split('/')
 
-    response.cookies.set('org', orgSlug)
+    response.cookies.set('organization', orgSlug)
   } else {
-    response.cookies.delete('org')
+    response.cookies.delete('organization')
   }
 
   return response

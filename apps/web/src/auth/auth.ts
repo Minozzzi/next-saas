@@ -10,13 +10,13 @@ export async function isAuthenticated() {
   return !!cookiesStore.get('token')?.value
 }
 
-export async function getCurrentOrg() {
+export async function getCurrentOrganization() {
   const cookieStore = await cookies()
-  return cookieStore.get('org')?.value ?? null
+  return cookieStore.get('organization')?.value ?? null
 }
 
 export async function getCurrentMembership() {
-  const org = await getCurrentOrg()
+  const org = await getCurrentOrganization()
 
   if (!org) {
     return null
