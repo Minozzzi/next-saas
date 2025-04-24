@@ -24,7 +24,6 @@ const signUpSchema = z
   })
 
 export async function signUpAction(data: FormData) {
-  console.log('data: ', data)
   const result = signUpSchema.safeParse(Object.fromEntries(data))
 
   if (!result.success) {
