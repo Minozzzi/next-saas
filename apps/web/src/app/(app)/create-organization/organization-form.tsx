@@ -17,7 +17,7 @@ export function OrganizationForm() {
   )
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <form className="flex h-full flex-col gap-4" onSubmit={handleSubmit}>
       {!success && message && (
         <Alert variant="destructive">
           <AlertTriangle className="size-4" />
@@ -90,7 +90,7 @@ export function OrganizationForm() {
         )}
       </div>
 
-      <Button type="submit" className="w-full" disabled={isPending}>
+      <Button type="submit" className="mt-auto w-full" disabled={isPending}>
         {isPending ? (
           <Loader2Icon className="size-4 animate-spin" />
         ) : (
