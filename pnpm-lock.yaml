@@ -105,6 +105,9 @@ importers:
       '@saas/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@tanstack/react-query':
+        specifier: ^5.75.2
+        version: 5.75.2(react@19.0.0)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -2041,6 +2044,19 @@ packages:
       postcss: 8.5.3
       tailwindcss: 4.0.17
     dev: true
+
+  /@tanstack/query-core@5.75.0:
+    resolution: {integrity: sha512-rk8KQuCdhoRkzjRVF3QxLgAfFUyS0k7+GCQjlGEpEGco+qazJ0eMH6aO1DjDjibH7/ik383nnztua3BG+lOnwg==}
+    dev: false
+
+  /@tanstack/react-query@5.75.2(react@19.0.0):
+    resolution: {integrity: sha512-8F8VOsWUfSkCFoi62O9HSZT9jDgg28Ln8Z2dYKfRo/O2A0sgvr0uxTuNoon3PPXoDuHofv5V3elBI1M2Gh1MPg==}
+    peerDependencies:
+      react: ^18 || ^19
+    dependencies:
+      '@tanstack/query-core': 5.75.0
+      react: 19.0.0
+    dev: false
 
   /@types/bcryptjs@2.4.6:
     resolution: {integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ==}
