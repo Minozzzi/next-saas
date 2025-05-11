@@ -8,7 +8,7 @@ import { createProject } from '@/http/create-project'
 
 const projectSchema = z.object({
   name: z.string().min(4, 'Please, include at least 4 characters'),
-  description: z.string(),
+  description: z.string().min(10, 'Please, include at least 10 characters'),
 })
 
 export async function createProjectAction(data: FormData) {

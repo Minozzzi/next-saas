@@ -1,6 +1,7 @@
 'use client'
 
 import { AlertTriangle, CheckCircle2, Loader2Icon } from 'lucide-react'
+import { useParams } from 'next/navigation'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -8,12 +9,21 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useFormState } from '@/hooks/user-form-state'
+import { queryClient } from '@/lib/react-query'
 
 import { createProjectAction } from './actions'
 
 export function ProjectForm() {
-  const [{ success, message, errors }, handleSubmit, isPending] =
-    useFormState(createProjectAction)
+  const { slug: organization } = useParams<{ slug: string }>()
+
+  const [{ success, message, errors }, handleSubmit, isPending] = useFormState(
+    createProjectAction,
+    () => {
+      queryClient.invalidateQueries({
+        queryKey: [organization, 'projects'],
+      })
+    },
+  )
 
   return (
     <form className="flex h-full flex-col gap-4" onSubmit={handleSubmit}>
