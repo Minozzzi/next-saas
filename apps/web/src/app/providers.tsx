@@ -6,7 +6,7 @@ import type { PropsWithChildren } from 'react'
 
 import { queryClient } from '@/lib/react-query'
 
-export function Providers({ children }: PropsWithChildren) {
+export function Providers({ children }: Readonly<PropsWithChildren>) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider

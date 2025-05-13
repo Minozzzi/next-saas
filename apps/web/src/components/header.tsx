@@ -12,7 +12,7 @@ export async function Header() {
   const permissions = await getAbility()
 
   return (
-    <header className="mx-auto flex max-w-[1200px] items-center justify-between border-b pb-2">
+    <header className="mx-auto flex max-w-[1200px] items-center justify-between">
       <div className="flex items-center gap-3">
         <Flower2Icon className="size-6 text-white" />
 
