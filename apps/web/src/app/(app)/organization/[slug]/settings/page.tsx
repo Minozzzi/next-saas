@@ -9,6 +9,7 @@ import {
 import { getOrganization } from '@/http/get-organization'
 
 import { OrganizationForm } from '../../organization-form'
+import { Billing } from './billing'
 import { ShutdownOrganizationButton } from './shutdown-organization-button'
 
 export default async function SettingsPage() {
@@ -55,7 +56,7 @@ export default async function SettingsPage() {
           </Card>
         )}
 
-        {canGetBilling && <div>billing settings will go here</div>}
+        {canGetBilling && <Billing />}
 
         {canShutdownOrganization && (
           <Card>
