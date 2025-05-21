@@ -1,5 +1,5 @@
 import { organizationSchema } from '@saas/auth'
-import { ArrowLeftRightIcon, CrownIcon } from 'lucide-react'
+import { ArrowLeftRightIcon, CrownIcon, UserMinusIcon } from 'lucide-react'
 
 import {
   getAbility,
@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { getMembers } from '@/http/get-members'
 import { getOrganization } from '@/http/get-organization'
+
+import { removeMemberAction } from './actions'
 
 export async function MemberList() {
   const [currentOrganization, currentMembership, permissions] =
@@ -83,6 +85,23 @@ export async function MemberList() {
                         <ArrowLeftRightIcon className="mr-2 size-4" />
                         Transfer ownership
                       </Button>
+                    )}
+
+                    {permissions?.can('delete', 'User') && (
+                      <form action={removeMemberAction.bind(null, member.id)}>
+                        <Button
+                          disabled={
+                            member.userId === currentMembership.userId ||
+                            member.userId === organization.ownerId
+                          }
+                          type="submit"
+                          size="sm"
+                          variant="destructive"
+                        >
+                          <UserMinusIcon className="mr-2 size-4" />
+                          Remove member
+                        </Button>
+                      </form>
                     )}
                   </div>
                 </TableCell>
