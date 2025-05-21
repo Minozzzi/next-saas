@@ -17,7 +17,11 @@ export async function getMembers(
   organization: string,
 ): Promise<GetMembersResponse> {
   const result = await api
-    .get(`organizations/${organization}/members`)
+    .get(`organizations/${organization}/members`, {
+      next: {
+        tags: [`${organization}/members`],
+      },
+    })
     .json<GetMembersResponse>()
 
   return result
