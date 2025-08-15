@@ -1,7 +1,12 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { LogInIcon } from 'lucide-react'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
+import { isAuthenticated } from '@/auth/auth'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { getInvite } from '@/http/get-invite'
 
@@ -14,6 +19,16 @@ export default async function InvitePage({
 }) {
   const { id: inviteId } = params
   const { invite } = await getInvite(inviteId)
+
+  const isUserAuthenticated = await isAuthenticated()
+
+  async function signInFromInvite() {
+    'use server'
+
+    const cookiesStore = await cookies()
+    cookiesStore.set('inviteId', inviteId)
+    redirect(`/auth/sign-in?email=${invite.email}`)
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4">
@@ -43,6 +58,15 @@ export default async function InvitePage({
         </div>
 
         <Separator />
+
+        {!isUserAuthenticated && (
+          <form action={signInFromInvite}>
+            <Button type="submit" variant="secondary" className="w-full">
+              <LogInIcon className="mr-2 size-4" />
+              Sign in to accept the invite
+            </Button>
+          </form>
+        )}
       </div>
     </div>
   )

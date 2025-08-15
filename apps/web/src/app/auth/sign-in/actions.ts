@@ -4,6 +4,7 @@ import { HTTPError } from 'ky'
 import { cookies } from 'next/headers'
 import { z } from 'zod'
 
+import { acceptInvite } from '@/http/accept-invite'
 import { signinWithPassword } from '@/http/sign-in-with-password'
 
 const signInSchema = z.object({
@@ -39,6 +40,15 @@ export async function signInWithEmailAndPasswordAction(data: FormData) {
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 1 week
     })
+
+    const inviteId = cookiesStore.get('inviteId')?.value
+
+    if (inviteId) {
+      try {
+        await acceptInvite(inviteId)
+        cookiesStore.delete('inviteId')
+      } catch {}
+    }
 
     return { success: true, message: null, errors: null }
   } catch (error) {
