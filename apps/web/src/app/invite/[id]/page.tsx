@@ -1,13 +1,14 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { LogInIcon } from 'lucide-react'
+import { CheckCircleIcon, LogInIcon } from 'lucide-react'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { isAuthenticated } from '@/auth/auth'
+import { auth, isAuthenticated } from '@/auth/auth'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { acceptInvite } from '@/http/accept-invite'
 import { getInvite } from '@/http/get-invite'
 
 dayjs.extend(relativeTime)
@@ -20,14 +21,24 @@ export default async function InvitePage({
   const { id: inviteId } = params
   const { invite } = await getInvite(inviteId)
 
+  const { user: authenticatedUser } = await auth()
   const isUserAuthenticated = await isAuthenticated()
+  const userIsAuthenticatedWithSameEmailFromInvite =
+    isUserAuthenticated && authenticatedUser?.email === invite.email
 
-  async function signInFromInvite() {
+  async function signInFromInviteAction() {
     'use server'
 
     const cookiesStore = await cookies()
     cookiesStore.set('inviteId', inviteId)
     redirect(`/auth/sign-in?email=${invite.email}`)
+  }
+
+  async function acceptInviteAction() {
+    'use server'
+
+    await acceptInvite(inviteId)
+    redirect('/')
   }
 
   return (
@@ -60,10 +71,19 @@ export default async function InvitePage({
         <Separator />
 
         {!isUserAuthenticated && (
-          <form action={signInFromInvite}>
+          <form action={signInFromInviteAction}>
             <Button type="submit" variant="secondary" className="w-full">
               <LogInIcon className="mr-2 size-4" />
               Sign in to accept the invite
+            </Button>
+          </form>
+        )}
+
+        {userIsAuthenticatedWithSameEmailFromInvite && (
+          <form action={acceptInviteAction}>
+            <Button type="submit" variant="secondary" className="w-full">
+              <CheckCircleIcon className="mr-2 size-4" />
+              Join {invite.organization.name}
             </Button>
           </form>
         )}
